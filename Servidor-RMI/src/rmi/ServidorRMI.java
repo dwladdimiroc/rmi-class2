@@ -46,7 +46,9 @@ public class ServidorRMI {
     }
 
     //Ingresa el objeto referenciado al registro del servidor, de tal manera
-    //que pueda ser utilizado posteriormente de forma remota
+    //que pueda ser utilizado posteriormente de forma remota. Este objeto va a ser
+    //genérico, debido que pueden ser de muchos tipos, en este caso Usuario o
+    //Tablero, de tal manera que después se castee el tipo de la clase.
     public boolean iniciarConexion(Object objeto, String nombre, int Puerto) {      
         try {
             this.registro = getRegistro(Puerto);
@@ -56,14 +58,22 @@ public class ServidorRMI {
             //con el nombre de referencia del objeto y el objeto inicializado
             //que entró por parámetro
             
+            //Es importante analizar que se casteará que tipo de implementación es que la está entrando
             if (objeto.getClass().equals(ImplementacionUsuario.class)){
                 logger.log(Level.INFO, "Se agregara ".concat(nombre).concat(" con el objecto Usuario"));
+                //De tal manera que aquí se castee la interface que le corresponde
                 registro.rebind(nombre, (Usuario) objeto);
             }
             else if (objeto.getClass().equals(ImplementacionTablero.class)){
                 logger.log(Level.INFO, "Se agregara ".concat(nombre).concat(" con el objecto Tablero"));
                 registro.rebind(nombre, (Tablero) objeto);
             }
+            
+            //Nota: Esto también se podría realizar de otra manera, debido que 
+            //se podrían implementar dos interfaces a la misma implementación.
+            //De ser así, esta forma no serviría, debido que aquí estamos
+            //aplicando distintas implementaciones a distintas interfaces.
+               
         } catch (RemoteException re) {
             //En caso de haber un error, es mostrado por un mensaje
             logger.log(Level.SEVERE, re.getMessage());

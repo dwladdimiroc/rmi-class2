@@ -14,5 +14,6 @@ import java.rmi.RemoteException;
 //Todos estos métodos deben poseer como mínimo la excepción RemoteException
 
 public interface Tablero extends Remote {
-    public int tamanoTablero() throws RemoteException;
+    public void editarTablero(int tamanoTablero) throws RemoteException;
+    public String actTablero() throws RemoteException;
 }
